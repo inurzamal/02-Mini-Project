@@ -1,20 +1,28 @@
 package com.nur.usermgt.bindings;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import lombok.Data;
 
 @Data
 public class UserRegForm {
-	
-	private String FIRST_NAME;
-	private String LAST_NAME;
-	private String USER_EMAIL;
-	private String USER_MOBILE;
-	private Date DOB;
-	private String GENDER;
-	private int CITY_ID;
-	private int STATE_ID;
-	private int COUNTRY_ID;
+
+	private String fname;
+
+	private String lname;
+
+	private String email;
+
+	private Long phno;
+
+	private LocalDate dob;
+
+	private String gender;
+
+	private Integer cityId;
+
+	private Integer stateId;
+
+	private Integer countryId;
 
 }

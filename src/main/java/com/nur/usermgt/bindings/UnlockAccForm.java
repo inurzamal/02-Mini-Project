@@ -5,7 +5,8 @@ import lombok.Data;
 @Data
 public class UnlockAccForm {
 	
-	private String USER_EMAIL;
-	private String tmp_pwd;
-	private String pwd;
+	private String email;
+	private String tmpPwd;
+	private String newPwd;
+	private String confirmNewPwd;
 }

@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.nur.usermgt.entities.StateMasterEntity;
 
-public interface StateMasterRepo extends JpaRepository<StateMasterEntity, Integer> {
+public interface StateRepository extends JpaRepository<StateMasterEntity, Integer> {
 
 }
