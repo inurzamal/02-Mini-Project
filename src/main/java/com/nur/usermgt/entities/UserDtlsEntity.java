@@ -29,7 +29,7 @@ public class UserDtlsEntity {
 	@Column(unique=true)
 	private String email;
 	
-	private String pwd;
+	private String password;
 	
 	private Long phno;
 	

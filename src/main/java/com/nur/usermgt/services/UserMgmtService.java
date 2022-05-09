@@ -8,20 +8,22 @@ import com.nur.usermgt.bindings.UserRegForm;
 
 public interface UserMgmtService {
 	
-	public String signIn(LoginForm loginForm);
+	public String login(LoginForm loginForm);
 	
-	public String signUp(UserRegForm regForm);
 	
-	public String uniqueEmail(String email);
+	public String emailCheck(String email);
+	
+	Map<Integer, String> loadCountries();
+	
+	Map<Integer, String> loadStates(int countryId);
+	
+	Map<Integer, String> loadCities(int stateId);
+	
+	public String registerUser(UserRegForm regForm);
+	
 	
 	public String unlockUser(UnlockAccForm unlock);
 	
 	public String forgotPassword(String email);
-	
-	Map<Integer, String> getCountry();
-	
-	Map<Integer, String> getState(int countryId);
-	
-	Map<Integer, String> getCity(int stateId);
 	
 }
