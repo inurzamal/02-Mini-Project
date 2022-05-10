@@ -1,5 +1,7 @@
 package com.nur.usermgt.services;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +22,7 @@ import com.nur.usermgt.repository.CityRepository;
 import com.nur.usermgt.repository.CountryRepository;
 import com.nur.usermgt.repository.StateRepository;
 import com.nur.usermgt.repository.UserDtlsRepository;
+import com.nur.usermgt.utils.EmailUtils;
 
 @Service
 public class UserMgmtServiceImpl implements UserMgmtService {
@@ -35,6 +38,9 @@ public class UserMgmtServiceImpl implements UserMgmtService {
 
 	@Autowired
 	private CityRepository cityRepo;
+	
+	@Autowired
+	private EmailUtils emailUtils;
 
 	@Override
 	public String login(LoginForm loginForm) {
@@ -117,11 +123,19 @@ public class UserMgmtServiceImpl implements UserMgmtService {
 		
 		entity.setPassword(generatePassword());
 		
-		userRepo.save(entity);
+		UserDtlsEntity savedEntity = userRepo.save(entity);
 		
-		//TODO : send email
+		String email = regForm.getEmail();
+		String subjects = "User Registration - NIELIT Guwahati";	
+		String fileName = "UNLOCK-ACC-EMAI-BODY-TEMPLATE.txt";	
+		String body = readMailBodyContent(fileName, entity);	
+		boolean isSent = emailUtils.sendEmail(email, subjects, body);
 		
-		return "success";
+		if(savedEntity.getUserid() != null && isSent) {
+			return "SUCCESS";
+		}
+		
+		return "FAIL";
 	}
 	
 
@@ -154,8 +168,16 @@ public class UserMgmtServiceImpl implements UserMgmtService {
 		if(entity == null) {
 			return "No user available with this email";
 		}
-			
-		//TODO : send pwd to email
+				
+		String fileName="RECOVER-PASSWORD-EMAIL-BODY-TEMPLATE.txt";	
+		String mailBody = readMailBodyContent(fileName, entity);
+		String subjects = "Recover Password";
+		
+		boolean isSent = emailUtils.sendEmail(email, subjects, mailBody);
+		
+		if(isSent) {
+			return "Password Sent to registered Email";
+		}
 		
 		return null;
 	
@@ -178,7 +200,40 @@ public class UserMgmtServiceImpl implements UserMgmtService {
 
 	    return generatedString;
 	}
-
+	
+	private String readMailBodyContent(String fileName, UserDtlsEntity entity) {
+		
+		String mailBody = null;
+			
+		try {
+			StringBuffer sb = new StringBuffer();
+			
+			FileReader fr = new FileReader(fileName);
+			BufferedReader br = new BufferedReader(fr);
+			
+			String line = br.readLine(); // reading first line data
+			
+			while(line != null) {
+				sb.append(line);	// appending line data to buffer obj
+				br.readLine();		// reading next line data		
+			}	
+			
+			mailBody = sb.toString();
+			
+			mailBody = mailBody.replace("{FNAME}", entity.getFname());
+			mailBody = mailBody.replace("{LNAME}", entity.getLname());
+			mailBody = mailBody.replace("{TEMP-PWD}", entity.getPassword());
+			mailBody = mailBody.replace("{EMAIL}", entity.getEmail());
+			mailBody = mailBody.replace("{PWD}", entity.getPassword());
+			
+			br.close();
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return mailBody;		
+	}
 }
 
 
