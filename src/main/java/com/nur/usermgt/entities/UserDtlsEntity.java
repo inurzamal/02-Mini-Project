@@ -10,7 +10,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import lombok.Data;
 
 @Entity
@@ -20,7 +19,7 @@ public class UserDtlsEntity {
 	
 	@Id
 	@GeneratedValue
-	private Long userid;
+	private Long userId;
 	
 	private String fname;
 	
@@ -37,10 +36,13 @@ public class UserDtlsEntity {
 	
 	private String gender;
 	
+	@Column(name="CITY_ID")
 	private Integer cityId;
 	
+	@Column(name="STATE_ID")
 	private Integer stateId;
 	
+	@Column(name="COUNTRY_ID")
 	private Integer countryId;
 	
 	private String accStatus;
